@@ -8,33 +8,26 @@ export default class NewApiServis {
       this.inputValue = ``;
       this.page = 1;
       this.IPA_KEY = `37860129-0a816fc38343337d9878906bd`; 
-      this.total = 0;
+      this.total = '';
+      this.per_page = 40;
+      this.totalImg = ``;
     }
 
   async fetchPixabay() {
    
    const fetchResponsePixabay = await axios.get(`https://pixabay.com/api/?key=${this.IPA_KEY}&q=${this.inputValue}&image_type=photo&orientation=horizontal&safesearch=thue&per_page=40&page=${this.page}`)
     const fetchJson = await fetchResponsePixabay.data.hits;
-    const totalHit = await fetchResponsePixabay.totalHit;
+    this.totalImg = await fetchResponsePixabay.totalHits;
     this.incrementPage()
     // this.simpleLitgthBoxes()
     return fetchJson;
   }
   
-  //  fetchPixabay() {
-  //     return fetch(`https://pixabay.com/api/?key=${this.IPA_KEY}&q=${this.inputValue}&image_type=photo&orientation=horizontal&safesearch=thue&per_page=40&page=${this.page}`)
-  //     .then(response => response.json())
-  //   .then((data) => {
-  //     // data.totalHits === this.total
-  //     this.incrementPage()
-  //     // this.totalHits(data)
-  //       //  this.totalHits()
-  //     return data.hits; 
-  //     })
-  // }
+  remainderInTotalHits() {
+    this.total = this.totalImg - this.per_page;
+}
 
-
-  incrementPage() {
+ incrementPage() {
     this.page += 1;
   }
 
@@ -42,13 +35,11 @@ export default class NewApiServis {
     this.page = 1;
   }
 
-  simpleLitgthBoxes() {
-     SimpleLightbox.refresh();
-  }
-  // totalHits(data) {
-  //   if (this.total === data.totalHits) {
-  //   alert("We're sorry, but you've reached the end of search results.")
-  // }  
+
+
+  // simpleLitgthBoxes() {
+  //    SimpleLightbox.refresh();
   // }
+
 
 }

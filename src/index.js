@@ -16,8 +16,6 @@ const gallery = document.querySelector(`.gallery`);
 
 const newApiServis = new NewApiServis();
 
-// let total = ``;
-// let render =``
 submitForm.setAttribute(`disabled`, true);
 
 searchForm.addEventListener(`submit`, onSubmitForm);
@@ -31,50 +29,21 @@ function onSubmitForm(e) {
   onLoadMoreButton();
 };
  
-// async function onLoadMoreButton() {
-//   buttonRemoveClass();
- 
-//   try {
-//     const render = await newApiServis.fetchPixabay();
-//     const renderRes = await renderResponse(render);
-    
-//     buttonAddClass();
-//     return renderRes;
-//   }
-// catch
-//   {
-//      const errorImagesFetch = await errorFetch();
-//      return errorImagesFetch
-//       // totalImage();
-//   }
-//   }
-
 async function onLoadMoreButton() {
   buttonRemoveClass();
     const render = await newApiServis.fetchPixabay();
     const renderRes = await renderResponse(render);
-    
-  buttonAddClass();
-  if (!render === []) {
-     return renderRes;
-  }
-  else {
-      const errorImagesFetch = await errorFetch(render); 
-     return errorImagesFetch
-  }
+    await totalImage(render);
+    buttonAddClass();
+ 
+  for (let i = 0; i >= render.length; i++) {
+   const error = await errorFetch(render); 
+   return error;
   }
 
-// function onLoadMoreButton() {
+  return renderRes;
+  }
 
-//   buttonRemoveClass();
-//   newApiServis.fetchPixabay().then(hits => {
-//     renderResponse(hits),
-//       //  totalImage(),
-//       // totalHitsImages(totalHits),
-//     buttonAddClass()
-//   })
-//     .catch(errorFetch())
-// }
 
 function buttonAddClass() { 
   submitForm.classList.add(`is-visible`);
@@ -87,22 +56,16 @@ function buttonRemoveClass() {
 
 function buttonIsHidden() {
   submitForm.classList.add(`is-hidden`);
-  buttonRemoveClass()
+  buttonRemoveClass();
 }
 
-// function buttonDisabledTrue() {
-//   submitForm.setAttribute(`disabled`, true);
-// }
-
- async function errorFetch() {
-   const notifyError = await Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
+async function errorFetch() {
+      const notifyError = await Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
+}
  
- }
-
 async function renderResponse(hits) {
     const markup = await hits.map((hit) => {
-        return `
-
+      return `
     <div class="photo-card"> 
        <a class= "photo-link"> 
   <img src="${hit.webformatURL}" alt="${hit.tags}" loading="lazy" ${hit.largeImageURL}/>
@@ -125,17 +88,16 @@ async function renderResponse(hits) {
 `
     })
     .join(""); 
-  gallery.innerHTML = markup;
-
+  gallery.insertAdjacentHTML('beforeend', markup);
 }
   
-async function totalImage(totalHits) {
-   if (totalHits === newApiServis.total) {
+async function totalImage() {
+  if (newApiServis.total === 0) {
    buttonIsHidden();
- const totalHits = await window.alert("We're sorry, but you've reached the end of search results.");
-  } 
-
+ const isTotalImg = await window.alert("We're sorry, but you've reached the end of search results.");
+ } 
 }
+
  
 function clearForm() {
   gallery.innerHTML = ``;
