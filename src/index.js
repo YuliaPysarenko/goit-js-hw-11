@@ -1,25 +1,16 @@
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import NewApiServis from './newApiServis';
+import linksDokQuerySel from './links';
+// import SimpleLightbox  from "simplelightbox";
+// import "simplelightbox/dist/simple-lightbox.min.css";
 
-import SimpleLightbox  from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
-
-// import axios from "axios";
-// axios.defaults.headers.common["x-api-key"] = "твой ключ";
-// const axios = require('axios/dist/node/axios.cjs');
-
-
-const searchForm = document.querySelector(`.search-form`);
-const submitForm = document.querySelector(`.submit-form`);
-const gallery = document.querySelector(`.gallery`);
-
+const link = new linksDokQuerySel;
 const newApiServis = new NewApiServis();
 
-submitForm.setAttribute(`disabled`, true);
-
-searchForm.addEventListener(`submit`, onSubmitForm);
-submitForm.addEventListener(`click`, onLoadMoreButton )
+link.submitForm.setAttribute(`disabled`, true);
+link.searchForm.addEventListener(`submit`, onSubmitForm);
+link.submitForm.addEventListener(`click`, onLoadMoreButton )
 
 function onSubmitForm(e) {
  e.preventDefault();
@@ -31,36 +22,47 @@ function onSubmitForm(e) {
  
 async function onLoadMoreButton() {
   buttonRemoveClass();
-    const render = await newApiServis.fetchPixabay();
-    const renderRes = await renderResponse(render);
-    await totalImage(render);
-    buttonAddClass();
- 
+  const render = await newApiServis.fetchPixabay();
+  const renderRes = await renderResponse(render);
+  const allImg =  await isAllTotalImage(render);
+  buttonAddClass();
+  
   for (let i = 0; i >= render.length; i++) {
-   const error = await errorFetch(render); 
-   return error;
+   return await errorFetch(render);
   }
 
+  if (render.length) {
+    return allImg;
+  } 
+
   return renderRes;
-  }
+}
+  
+
+async function isAllTotalImage(totalHits) {
+   if (totalHits <= 40) {
+   buttonIsHidden();
+    await window.alert("We're sorry, but you've reached the end of search results.");
+  } 
+}
 
 
 function buttonAddClass() { 
-  submitForm.classList.add(`is-visible`);
-  submitForm.removeAttribute(`disabled`);
+  link.submitForm.classList.add(`is-visible`);
+  link.submitForm.removeAttribute(`disabled`);
 }
 
 function buttonRemoveClass() {
-  submitForm.classList.remove(`is-visible`);
+  link.submitForm.classList.remove(`is-visible`);
 }
 
 function buttonIsHidden() {
-  submitForm.classList.add(`is-hidden`);
+  link.submitForm.classList.add(`is-hidden`);
   buttonRemoveClass();
 }
 
 async function errorFetch() {
-      const notifyError = await Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
+   await Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
 }
  
 async function renderResponse(hits) {
@@ -88,29 +90,22 @@ async function renderResponse(hits) {
 `
     })
     .join(""); 
-  gallery.insertAdjacentHTML('beforeend', markup);
-}
-  
-async function totalImage() {
-  if (newApiServis.total === 0) {
-   buttonIsHidden();
- const isTotalImg = await window.alert("We're sorry, but you've reached the end of search results.");
- } 
+  link.gallery.insertAdjacentHTML('beforeend', markup);
 }
 
- 
 function clearForm() {
-  gallery.innerHTML = ``;
+  link.gallery.innerHTML = ``;
+
 }
 
-const lightbox = new SimpleLightbox('.gallery div a', {
-  captionsData: `alt`,
-  captionSelector: `img`,
-  // captionPosition: `bottom`,
-  captionType: 'img alt="${hit.largeImageURL}',
-  captionDelay: 250,
+// const lightbox = new SimpleLightbox('.gallery div a', {
+//   captionsData: `alt`,
+//   captionSelector: `img`,
+//   // captionPosition: `bottom`,
+//   captionType: 'img alt="${hit.largeImageURL}',
+//   captionDelay: 250,
   
-});
+// });
 
-console.log(lightbox)
+// console.log(lightbox)
 

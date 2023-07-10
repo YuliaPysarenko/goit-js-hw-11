@@ -1,7 +1,8 @@
-//  const axios = require('axios').default;
+
 import axios from "axios";
-import SimpleLightbox  from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+
+// import SimpleLightbox  from "simplelightbox";
+// import "simplelightbox/dist/simple-lightbox.min.css";
 
 export default class NewApiServis {
     constructor() {
@@ -9,8 +10,8 @@ export default class NewApiServis {
       this.page = 1;
       this.IPA_KEY = `37860129-0a816fc38343337d9878906bd`; 
       this.total = '';
-      this.per_page = 40;
       this.totalImg = ``;
+      this.per_page = 40;
     }
 
   async fetchPixabay() {
@@ -18,13 +19,13 @@ export default class NewApiServis {
    const fetchResponsePixabay = await axios.get(`https://pixabay.com/api/?key=${this.IPA_KEY}&q=${this.inputValue}&image_type=photo&orientation=horizontal&safesearch=thue&per_page=40&page=${this.page}`)
     const fetchJson = await fetchResponsePixabay.data.hits;
     this.totalImg = await fetchResponsePixabay.totalHits;
-    this.incrementPage()
-    // this.simpleLitgthBoxes()
-    return fetchJson;
+    this.incrementPage();
+    this.remainderInTotalHits();
+     return fetchJson;
   }
   
   remainderInTotalHits() {
-    this.total = this.totalImg - this.per_page;
+    this.total = this.totalImg - this.page * this.per_page; 
 }
 
  incrementPage() {
@@ -35,11 +36,7 @@ export default class NewApiServis {
     this.page = 1;
   }
 
-
-
   // simpleLitgthBoxes() {
   //    SimpleLightbox.refresh();
   // }
-
-
 }
