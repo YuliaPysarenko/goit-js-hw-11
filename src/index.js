@@ -24,25 +24,31 @@ async function onLoadMoreButton() {
   buttonRemoveClass();
   const render = await newApiServis.fetchPixabay();
   const renderRes = await renderResponse(render);
-  const allImg =  await isAllTotalImage(render);
+  const finishImg = await isAndTotalImage(render);
+  // const errorImg = await errorFetch();
   buttonAddClass();
-  
-  for (let i = 0; i >= render.length; i++) {
-   return await errorFetch(render);
+  await hitsLengthArray(render);
+  //    for (let i = 0; i >= render.length; i +1) {
+  //  return await errorFetch(render);
+  //     // return errorImg
+  // }
+  if (render) {
+    return finishImg;
   }
-
-  if (render.length) {
-    return allImg;
-  } 
-
   return renderRes;
 }
-  
 
-async function isAllTotalImage(totalHits) {
+
+async function hitsLengthArray(hits) {
+  for (let i = 0; i >= hits.length; i + 1) {
+    await errorFetch();
+}
+}
+
+async function isAndTotalImage(totalHits) {
    if (totalHits <= 40) {
    buttonIsHidden();
-    await window.alert("We're sorry, but you've reached the end of search results.");
+   await window.alert("We're sorry, but you've reached the end of search results.");
   } 
 }
 
