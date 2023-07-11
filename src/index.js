@@ -23,27 +23,37 @@ function onSubmitForm(e) {
 async function onLoadMoreButton() {
   buttonRemoveClass();
   const render = await newApiServis.fetchPixabay();
+  // const renderRes = await renderResponse(render);
+  // const finishImg = await isAndTotalImage(render);
+  // const errorImg = await errorFetch(render);
+  buttonAddClass();
+
+  try {
   const renderRes = await renderResponse(render);
   const finishImg = await isAndTotalImage(render);
-  // const errorImg = await errorFetch();
-  buttonAddClass();
-  await hitsLengthArray(render);
-  //    for (let i = 0; i >= render.length; i +1) {
-  //  return await errorFetch(render);
-  //     // return errorImg
-  // }
-  if (render) {
-    return finishImg;
   }
-  return renderRes;
+  catch {
+     if (render.length < 0) {
+  const errorImg = await errorFetch(render);
+    }
+
+    // return finishImg;
+  }
+  // try {
+  //   if (renderRes) {
+  //     return finishImg
+  //   }
+  //  return renderRes; 
+  // }
+  // catch {
+  //    if (render.length < 0) {
+  //   return errorImg
+  //   }
+
+  //   // return finishImg;
+  // }
 }
 
-
-async function hitsLengthArray(hits) {
-  for (let i = 0; i >= hits.length; i + 1) {
-    await errorFetch();
-}
-}
 
 async function isAndTotalImage(totalHits) {
    if (totalHits <= 40) {
@@ -51,7 +61,6 @@ async function isAndTotalImage(totalHits) {
    await window.alert("We're sorry, but you've reached the end of search results.");
   } 
 }
-
 
 function buttonAddClass() { 
   link.submitForm.classList.add(`is-visible`);

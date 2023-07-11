@@ -18,14 +18,17 @@ export default class NewApiServis {
    
    const fetchResponsePixabay = await axios.get(`https://pixabay.com/api/?key=${this.IPA_KEY}&q=${this.inputValue}&image_type=photo&orientation=horizontal&safesearch=thue&per_page=40&page=${this.page}`)
     const fetchJson = await fetchResponsePixabay.data.hits;
-    this.totalImg = await fetchResponsePixabay.totalHits;
+    this.totalImg = await fetchResponsePixabay.data.totalHits;
+      console.log(this.totalImg);
     this.incrementPage();
     this.remainderInTotalHits();
-     return fetchJson;
+  
+    return fetchJson;
   }
   
   remainderInTotalHits() {
-    this.total = this.totalImg - this.page * this.per_page; 
+     this.total = this.totalImg - this.page * this.per_page; 
+
 }
 
  incrementPage() {
