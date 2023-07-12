@@ -10,49 +10,74 @@ const newApiServis = new NewApiServis();
 
 link.submitForm.setAttribute(`disabled`, true);
 link.searchForm.addEventListener(`submit`, onSubmitForm);
-link.submitForm.addEventListener(`click`, onLoadMoreButton )
+link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
 
-function onSubmitForm(e) {
+//  function onSubmitForm(e) {
+//  e.preventDefault();
+//   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
+//   clearForm();
+//   newApiServis.resetPage();
+
+//   onLoadMoreButtonClick();
+// };
+
+// вар 1
+//  let render =``
+ 
+//  async function onSubmitForm(e) {
+//  e.preventDefault();
+//   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
+//    clearForm();
+   
+//   newApiServis.resetPage();
+  
+//   onLoadMoreButtonClick();
+//    if (render.length < 0) {
+//       await errorFetch();
+//    }
+// };
+
+ async function onSubmitForm(e) {
  e.preventDefault();
   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
-  clearForm();
-  newApiServis.resetPage();
-  onLoadMoreButton();
+   clearForm();
+   newApiServis.resetPage();
+  buttonRemoveClass();
+   const render = await newApiServis.fetchPixabay();
+   if (render.length < 0) {
+      await errorFetch();
+   }
+   await renderResponse(render);
+   
+    buttonAddClass();
 };
- 
-async function onLoadMoreButton() {
+
+ async function onLoadMoreButtonClick() {
   buttonRemoveClass();
   const render = await newApiServis.fetchPixabay();
-  // const renderRes = await renderResponse(render);
-  // const finishImg = await isAndTotalImage(render);
-  // const errorImg = await errorFetch(render);
-  buttonAddClass();
-
-  try {
-  const renderRes = await renderResponse(render);
+  const renderRes = await renderResponse(render)
   const finishImg = await isAndTotalImage(render);
-  }
-  catch {
-     if (render.length < 0) {
-  const errorImg = await errorFetch(render);
-    }
 
-    // return finishImg;
-  }
-  // try {
-  //   if (renderRes) {
-  //     return finishImg
-  //   }
-  //  return renderRes; 
-  // }
-  // catch {
-  //    if (render.length < 0) {
-  //   return errorImg
-  //   }
-
-  //   // return finishImg;
-  // }
+  buttonAddClass();
+  return finishImg;
+  
 }
+
+
+// Варіант 2
+// async function onLoadMoreButtonClick() {
+//   buttonRemoveClass();
+//   const render = await newApiServis.fetchPixabay();
+//   const renderRes = await renderResponse(render);
+//   const finishImg = await isAndTotalImage(render);
+//   const errorImg = await errorFetch(render);
+//    buttonAddClass();
+
+//   if (renderRes) {
+//     return finishImg
+//   }
+  
+// }
 
 
 async function isAndTotalImage(totalHits) {
