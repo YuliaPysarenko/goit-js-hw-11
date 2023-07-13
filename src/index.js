@@ -44,9 +44,11 @@ link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
    newApiServis.resetPage();
   buttonRemoveClass();
    const render = await newApiServis.fetchPixabay();
-   if (render.length < 0) {
-      await errorFetch();
-   }
+  //
+   if (render.length === 0) {
+     await errorFetch();
+    } 
+ 
    await renderResponse(render);
    
     buttonAddClass();
@@ -59,26 +61,9 @@ link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
   const finishImg = await isAndTotalImage(render);
 
   buttonAddClass();
-  return finishImg;
+  // return finishImg;
   
 }
-
-
-// Варіант 2
-// async function onLoadMoreButtonClick() {
-//   buttonRemoveClass();
-//   const render = await newApiServis.fetchPixabay();
-//   const renderRes = await renderResponse(render);
-//   const finishImg = await isAndTotalImage(render);
-//   const errorImg = await errorFetch(render);
-//    buttonAddClass();
-
-//   if (renderRes) {
-//     return finishImg
-//   }
-  
-// }
-
 
 async function isAndTotalImage(totalHits) {
    if (totalHits <= 40) {
