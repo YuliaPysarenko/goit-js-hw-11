@@ -12,31 +12,6 @@ link.submitForm.setAttribute(`disabled`, true);
 link.searchForm.addEventListener(`submit`, onSubmitForm);
 link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
 
-//  function onSubmitForm(e) {
-//  e.preventDefault();
-//   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
-//   clearForm();
-//   newApiServis.resetPage();
-
-//   onLoadMoreButtonClick();
-// };
-
-// вар 1
-//  let render =``
- 
-//  async function onSubmitForm(e) {
-//  e.preventDefault();
-//   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
-//    clearForm();
-   
-//   newApiServis.resetPage();
-  
-//   onLoadMoreButtonClick();
-//    if (render.length < 0) {
-//       await errorFetch();
-//    }
-// };
-
  async function onSubmitForm(e) {
  e.preventDefault();
   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
@@ -44,12 +19,13 @@ link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
    newApiServis.resetPage();
   buttonRemoveClass();
    const render = await newApiServis.fetchPixabay();
-  //
+  
    if (render.length === 0) {
-     await errorFetch();
+     errorFetch();
+     buttonIsHidden();
     } 
  
-   await renderResponse(render);
+   renderResponse(render);
    
     buttonAddClass();
 };
@@ -57,18 +33,16 @@ link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
  async function onLoadMoreButtonClick() {
   buttonRemoveClass();
   const render = await newApiServis.fetchPixabay();
-  const renderRes = await renderResponse(render)
-  const finishImg = await isAndTotalImage(render);
+  const renderRes =  renderResponse(render)
+  const finishImg =  isAndTotalImage(render);
 
-  buttonAddClass();
-  // return finishImg;
-  
+  buttonAddClass(); 
 }
 
-async function isAndTotalImage(totalHits) {
+ function isAndTotalImage(totalHits) {
    if (totalHits <= 40) {
-   buttonIsHidden();
-   await window.alert("We're sorry, but you've reached the end of search results.");
+     buttonIsHidden();
+     window.alert("We're sorry, but you've reached the end of search results.");      
   } 
 }
 
@@ -86,12 +60,12 @@ function buttonIsHidden() {
   buttonRemoveClass();
 }
 
-async function errorFetch() {
-   await Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
+ function errorFetch() {
+   Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
 }
  
-async function renderResponse(hits) {
-    const markup = await hits.map((hit) => {
+ function renderResponse(hits) {
+    const markup = hits.map((hit) => {
       return `
     <div class="photo-card"> 
        <a class= "photo-link"> 
