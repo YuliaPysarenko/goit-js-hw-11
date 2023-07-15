@@ -17,24 +17,26 @@ link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
   newApiServis.inputValue = e.currentTarget.elements.searchQuery.value;
    clearForm();
    newApiServis.resetPage();
-  buttonRemoveClass();
+   buttonRemoveClass();
+   buttonRemoveIsHidden();
    const render = await newApiServis.fetchPixabay();
   
    if (render.length === 0) {
      errorFetch();
-     buttonIsHidden();
+     buttonIsHidden(); 
     } 
- 
+  
    renderResponse(render);
-   
     buttonAddClass();
+
 };
 
  async function onLoadMoreButtonClick() {
-  buttonRemoveClass();
+   buttonRemoveClass();
+   
   const render = await newApiServis.fetchPixabay();
   const renderRes =  renderResponse(render)
-  const finishImg =  isAndTotalImage(render);
+  const finishImg = isAndTotalImage(render);
 
   buttonAddClass(); 
 }
@@ -42,7 +44,7 @@ link.submitForm.addEventListener(`click`, onLoadMoreButtonClick )
  function isAndTotalImage(totalHits) {
    if (totalHits <= 40) {
      buttonIsHidden();
-     window.alert("We're sorry, but you've reached the end of search results.");      
+   window.alert("We're sorry, but you've reached the end of search results.");      
   } 
 }
 
@@ -57,7 +59,11 @@ function buttonRemoveClass() {
 
 function buttonIsHidden() {
   link.submitForm.classList.add(`is-hidden`);
-  buttonRemoveClass();
+   buttonRemoveClass();
+}
+
+function buttonRemoveIsHidden() {
+  link.submitForm.classList.remove(`is-hidden`);
 }
 
  function errorFetch() {
